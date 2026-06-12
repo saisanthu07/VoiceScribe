@@ -64,4 +64,26 @@ router.get('/history', authMiddleware, async (req, res) => {
   }
 });
 
+/**
+ * DELETE /api/transcript/:id
+ * Protected — deletes a specific transcript by ID.
+ */
+router.delete('/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user?.sub;
+
+  try {
+    const result = await Transcript.findOneAndDelete({ _id: id, userId });
+    
+    if (!result) {
+      return res.status(404).json({ error: 'Transcript not found or unauthorized' });
+    }
+    
+    res.json({ message: 'Transcript deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting transcript:', err);
+    res.status(500).json({ error: 'Failed to delete transcript' });
+  }
+});
+
 module.exports = router;
