@@ -170,17 +170,24 @@ function DashboardPage() {
       });
       mediaStreamRef.current = stream;
 
-      // B. Establish WebSocket to secure backend proxy
-      // Convert backend URL (http/https) to ws/wss
-      const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsHost = backendUrl.replace(/^https?:\/\//, '');
-      const wsUrl = `${wsProtocol}//${wsHost}?token=${accessToken}`;
+      // B. Fetch dynamic Deepgram authorization token from backend
+      setInfoMessage('Initializing secure transcription session...');
+      const tokenRes = await axios.get(`${backendUrl}/api/deepgram/token`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
 
-      const ws = new WebSocket(wsUrl);
+      const tempToken = tokenRes.data?.token;
+      if (!tempToken) {
+        throw new Error('Did not receive dynamic token from backend.');
+      }
+
+      // C. Establish WebSocket directly to Deepgram using the dynamic token
+      const wsUrl = 'wss://api.deepgram.com/v1/listen?encoding=linear16&sample_rate=16000&channels=1&punctuate=true&interim_results=true';
+      const ws = new WebSocket(wsUrl, ['token', tempToken]);
       wsRef.current = ws;
 
       ws.onopen = () => {
-        console.log('Connected to WebSocket backend proxy');
+        console.log('Connected directly to Deepgram WebSocket');
         setInfoMessage('Recording active. Start speaking...');
         setIsRecording(true);
         setupAudioProcessing(stream);

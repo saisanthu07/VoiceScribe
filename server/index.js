@@ -8,6 +8,7 @@ const { setupWebSocketProxy } = require('./wsProxy');
 
 const userRoutes = require('./routes/user');
 const transcriptRoutes = require('./routes/transcript');
+const deepgramRoutes = require('./routes/deepgram');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -37,6 +38,7 @@ app.use(express.json());
 // ─── Routes ──────────────────────────────────────────────────────────────────
 app.use('/api/user', userRoutes);
 app.use('/api/transcript', transcriptRoutes);
+app.use('/api/deepgram', deepgramRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
