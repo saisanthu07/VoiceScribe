@@ -44,48 +44,7 @@ function LoginPage() {
       <div className="auth-card">
         {/* Logo */}
         <div className="auth-logo">
-          <div className="logo-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"
-                fill="url(#grad1)"
-              />
-              <path
-                d="M19 10v2a7 7 0 0 1-14 0v-2"
-                stroke="url(#grad2)"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-              <line
-                x1="12"
-                y1="19"
-                x2="12"
-                y2="23"
-                stroke="url(#grad2)"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-              <line
-                x1="8"
-                y1="23"
-                x2="16"
-                y2="23"
-                stroke="url(#grad2)"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-              <defs>
-                <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#a78bfa" />
-                  <stop offset="100%" stopColor="#818cf8" />
-                </linearGradient>
-                <linearGradient id="grad2" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#a78bfa" />
-                  <stop offset="100%" stopColor="#818cf8" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
+            <img src="https://cdn.prod.website-files.com/681ad20dd3cd0f20dea76d47/683d126432407ea89bc2e1bb_Logo_SF_Cropped_Dark%20Icon.png" alt="VoiceScribe Logo" className="logo-img" />
           <span className="logo-text">VoiceScribe</span>
         </div>
 

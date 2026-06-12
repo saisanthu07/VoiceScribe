@@ -221,6 +221,18 @@ body {
   letter-spacing: -0.5px;
 }
 
+.logo-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.logo-img-small {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
 .auth-title {
   font-size: 24px;
   font-weight: 700;

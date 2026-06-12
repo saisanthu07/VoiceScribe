@@ -370,26 +370,7 @@ function DashboardPage() {
       {/* Header bar */}
       <header className="dashboard-header">
         <div className="header-logo">
-          <div className="logo-icon-small">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"
-                fill="url(#gradDash)"
-              />
-              <path
-                d="M19 10v2a7 7 0 0 1-14 0v-2"
-                stroke="url(#gradDash)"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-              <defs>
-                <linearGradient id="gradDash" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#a78bfa" />
-                  <stop offset="100%" stopColor="#818cf8" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
+          <img src="https://cdn.prod.website-files.com/681ad20dd3cd0f20dea76d47/683d126432407ea89bc2e1bb_Logo_SF_Cropped_Dark%20Icon.png" alt="VoiceScribe Logo" className="logo-img-small" />
           <span className="logo-text-small">VoiceScribe</span>
         </div>
 
