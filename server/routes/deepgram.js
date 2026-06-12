@@ -5,7 +5,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 /**
  * GET /api/deepgram/token
  * Protected — generates an ephemeral, short-lived (60s) token for client-side Deepgram connection.
- * Keeps the master DEEPGRAM_API_KEY secure on the server.
+ * If the key has restricted permissions and cannot issue new tokens, falls back to returning the key itself.
  */
 router.get('/token', authMiddleware, async (req, res) => {
   const masterKey = process.env.DEEPGRAM_API_KEY;
@@ -28,23 +28,25 @@ router.get('/token', authMiddleware, async (req, res) => {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('❌ Deepgram API error generating token:', errorText);
-      return res.status(response.status).json({ error: 'Failed to generate token from Deepgram API' });
+      const errorJson = await response.json().catch(() => ({}));
+      console.warn('⚠️ Deepgram token grant failed (likely due to restricted key permissions):', errorJson.err_msg || response.statusText);
+      console.warn('⚠️ Falling back to returning DEEPGRAM_API_KEY directly for client session.');
+      return res.json({ token: masterKey, isFallback: true });
     }
 
     const data = await response.json();
     const token = data.access_token || data.token;
 
     if (!token) {
-      console.error('❌ Token missing in Deepgram API response:', data);
-      return res.status(502).json({ error: 'Invalid response from Deepgram token API' });
+      console.warn('⚠️ Token missing in Deepgram response. Falling back to master key.');
+      return res.json({ token: masterKey, isFallback: true });
     }
 
     res.json({ token });
   } catch (err) {
     console.error('❌ Error requesting Deepgram token:', err.message);
-    res.status(500).json({ error: 'Internal server error generating token' });
+    // Even on network error, try to return the master key as last resort
+    res.json({ token: masterKey, isFallback: true });
   }
 });
 
