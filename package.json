@@ -1,0 +1,16 @@
+{
+  "name": "voicescribe-root",
+  "version": "1.0.0",
+  "description": "Root workspace to manage and run both VoiceScribe client and server concurrently",
+  "scripts": {
+    "install:client": "npm install --prefix client",
+    "install:server": "npm install --prefix server",
+    "setup": "npm install && npm run install:client && npm run install:server",
+    "build": "npm run build --prefix client",
+    "dev": "concurrently --kill-others-on-fail \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
