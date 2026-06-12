@@ -23,6 +23,18 @@ router.get('/profile', authMiddleware, (req, res) => {
   });
 });
 
+const ensureDbConnected = async () => {
+  if (mongoose.connection.readyState === 1) return;
+  
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    throw new Error('MONGO_URI is missing from environment variables');
+  }
+  
+  console.log('🔄 MongoDB connecting (Serverless context)...');
+  await mongoose.connect(mongoUri);
+};
+
 /**
  * POST /api/user/delete
  * Protected route — deletes user transcripts from MongoDB and calls Nhost GraphQL
@@ -31,11 +43,12 @@ router.get('/profile', authMiddleware, (req, res) => {
 router.post('/delete', authMiddleware, async (req, res) => {
   const userId = req.user?.sub;
 
-  // Check if database is connected
-  if (mongoose.connection.readyState !== 1) {
-    console.error('❌ MongoDB Connection Error: Database is not connected (readyState !== 1)');
+  try {
+    await ensureDbConnected();
+  } catch (dbErr) {
+    console.error('❌ MongoDB Connection Failure:', dbErr.message);
     return res.status(503).json({ 
-      error: 'Database connection is not established. Please verify that your MONGO_URI is configured correctly in your deployment environment variables.' 
+      error: 'Database connection is not established. Please verify that your MONGO_URI environment variable is configured correctly in your deployment settings.' 
     });
   }
 
