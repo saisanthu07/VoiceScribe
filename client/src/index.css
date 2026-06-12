@@ -278,6 +278,40 @@ body {
   color: var(--text-muted);
 }
 
+.password-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-container .form-input {
+  padding-right: 46px;
+}
+
+.btn-toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: var(--transition-fast);
+}
+
+.btn-toggle-password:hover {
+  color: var(--text-secondary);
+}
+
+.btn-toggle-password:focus {
+  outline: none;
+  color: var(--accent-primary);
+}
+
 /* Buttons */
 .btn-primary {
   display: flex;
