@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const authMiddleware = require('../middleware/authMiddleware');
 const Transcript = require('../models/Transcript');
 
@@ -10,6 +11,14 @@ const Transcript = require('../models/Transcript');
  */
 router.post('/save', authMiddleware, async (req, res) => {
   const { text } = req.body;
+
+  // Check if database is connected
+  if (mongoose.connection.readyState !== 1) {
+    console.error('❌ MongoDB Connection Error: Database is not connected (readyState !== 1)');
+    return res.status(503).json({ 
+      error: 'Database connection is not established. Please verify that your MONGO_URI is configured correctly in your deployment environment variables.' 
+    });
+  }
 
   if (!text || text.trim().length === 0) {
     return res.status(400).json({ error: 'Transcript text is required and cannot be empty' });
@@ -44,11 +53,15 @@ router.post('/save', authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * GET /api/transcript/history
- * Protected — returns the last 5 transcripts for the logged-in user.
- */
 router.get('/history', authMiddleware, async (req, res) => {
+  // Check if database is connected
+  if (mongoose.connection.readyState !== 1) {
+    console.error('❌ MongoDB Connection Error: Database is not connected (readyState !== 1)');
+    return res.status(503).json({ 
+      error: 'Database connection is not established. Please verify that your MONGO_URI is configured correctly in your deployment environment variables.' 
+    });
+  }
+
   try {
     const userId = req.user?.sub;
 

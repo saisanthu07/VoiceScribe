@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const authMiddleware = require('../middleware/authMiddleware');
 const Transcript = require('../models/Transcript');
 
@@ -29,6 +30,14 @@ router.get('/profile', authMiddleware, (req, res) => {
  */
 router.post('/delete', authMiddleware, async (req, res) => {
   const userId = req.user?.sub;
+
+  // Check if database is connected
+  if (mongoose.connection.readyState !== 1) {
+    console.error('❌ MongoDB Connection Error: Database is not connected (readyState !== 1)');
+    return res.status(503).json({ 
+      error: 'Database connection is not established. Please verify that your MONGO_URI is configured correctly in your deployment environment variables.' 
+    });
+  }
 
   if (!userId) {
     return res.status(400).json({ error: 'User ID not found in token' });
