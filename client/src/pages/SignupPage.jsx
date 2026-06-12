@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuthenticationStatus } from '@nhost/react';
 import nhost from '../nhostClient';
 
 function SignupPage() {
@@ -12,6 +13,24 @@ function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuthenticationStatus();
+
+  // If already logged in, redirect to dashboard
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (isAuthLoading) {
+    return (
+      <div className="loading-screen">
+        <div className="spinner" />
+        <p>Loading…</p>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
