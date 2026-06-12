@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const jwt = require('jsonwebtoken');
+const { verifyToken } = require('./utils/auth');
 
 const DEEPGRAM_URL =
   'wss://api.deepgram.com/v1/listen?encoding=linear16&sample_rate=16000&channels=1&punctuate=true&interim_results=true';
@@ -18,7 +18,7 @@ const DEEPGRAM_URL =
 function setupWebSocketProxy(server) {
   const wss = new WebSocket.Server({ server });
 
-  wss.on('connection', (clientWs, req) => {
+  wss.on('connection', async (clientWs, req) => {
     // ── 1. Extract and verify the JWT from query string ─────────────────────
     let token = null;
     try {
@@ -36,11 +36,7 @@ function setupWebSocketProxy(server) {
 
     let decoded;
     try {
-      let secret = process.env.NHOST_JWT_SECRET;
-      if (secret) {
-        secret = secret.replace(/\\n/g, '\n');
-      }
-      decoded = jwt.verify(token, secret);
+      decoded = await verifyToken(token);
     } catch (err) {
       console.warn('WS connection rejected: invalid token —', err.message);
       clientWs.close(4001, 'Unauthorized: invalid token');

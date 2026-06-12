@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken');
+const { verifyToken } = require('../utils/auth');
 
 /**
  * Middleware to verify Nhost JWT from Authorization header.
  * Attaches decoded payload to req.user on success.
  * Returns 401 if token is missing or invalid.
  */
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -15,16 +15,7 @@ const authMiddleware = (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    let secret = process.env.NHOST_JWT_SECRET;
-    if (!secret) {
-      console.error('NHOST_JWT_SECRET is not set in environment variables');
-      return res.status(500).json({ error: 'Server misconfiguration: JWT secret missing' });
-    }
-    
-    // Support PEM public keys with escaped newlines (e.g. '\n') in env files
-    secret = secret.replace(/\\n/g, '\n');
-
-    const decoded = jwt.verify(token, secret);
+    const decoded = await verifyToken(token);
     req.user = decoded;
     next();
   } catch (err) {
