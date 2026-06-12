@@ -183,8 +183,7 @@ function DashboardPage() {
       }
 
       // C. Establish WebSocket directly to Deepgram using the dynamic token
-      const languageParam = selectedLanguage === 'auto' ? 'detect_language=true' : `language=${selectedLanguage}`;
-      const wsUrl = `wss://api.deepgram.com/v1/listen?encoding=linear16&sample_rate=16000&channels=1&punctuate=true&interim_results=true&model=nova-2&smart_format=true&${languageParam}`;
+      const wsUrl = `wss://api.deepgram.com/v1/listen?encoding=linear16&sample_rate=16000&channels=1&punctuate=true&interim_results=true&model=nova-2&smart_format=true&language=${selectedLanguage}`;
       const ws = new WebSocket(wsUrl, ['token', tempToken]);
       wsRef.current = ws;
 
@@ -483,7 +482,7 @@ function DashboardPage() {
             >
               <option value="en">English (US/UK)</option>
               <option value="en-IN">English (India)</option>
-              <option value="auto">Auto-Detect Language</option>
+              <option value="multi">Auto-Detect Language</option>
               <option value="hi">Hindi (हिन्दी)</option>
               <option value="es">Spanish (Español)</option>
               <option value="fr">French (Français)</option>
