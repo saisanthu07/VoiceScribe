@@ -23,18 +23,11 @@
       "dest": "server/index.js"
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "client/dist/assets/$1",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "client/$1",
-      "headers": {
-        "cache-control": "no-store"
-      }
+      "dest": "client/index.html"
     }
   ]
 }
