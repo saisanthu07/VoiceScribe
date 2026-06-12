@@ -23,6 +23,14 @@
       "dest": "server/index.js"
     },
     {
+      "src": "/assets/(.*)",
+      "dest": "client/assets/$1"
+    },
+    {
+      "src": "/mic-icon.svg",
+      "dest": "client/mic-icon.svg"
+    },
+    {
       "handle": "filesystem"
     },
     {
