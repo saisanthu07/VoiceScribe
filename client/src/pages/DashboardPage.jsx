@@ -339,7 +339,7 @@ function DashboardPage() {
       try {
         await axios.post(
           `${backendUrl}/api/transcript/save`,
-          { text: finalSavedText },
+          { text: finalSavedText, email: user?.email || 'unknown' },
           { headers: { Authorization: `Bearer ${accessToken}` } }
         );
         setInfoMessage('Transcript saved successfully!');

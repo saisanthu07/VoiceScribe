@@ -40,6 +40,7 @@ router.post('/save', authMiddleware, async (req, res) => {
   try {
     const userId = req.user?.sub;
     const email =
+      req.body.email ||
       req.user?.email ||
       req.user?.['https://hasura.io/jwt/claims']?.['x-hasura-user-email'] ||
       'unknown';
